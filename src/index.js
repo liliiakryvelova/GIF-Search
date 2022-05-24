@@ -2,19 +2,36 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
-// import Triangle from './js/triangle.js';
+import GIFservice from './GIF-service.js';
 
-// $(function () {
-//   $('#triangle-checker-form').on("submit", function (event) {
-//     event.preventDefault();
-//     console.log('hello');
-//     const length1 = parseInt($('#length1').val());
-//     const length2 = parseInt($('#length2').val());
-//     const length3 = parseInt($('#length3').val());
-//     const triangle = new Triangle(length1, length2, length3);
-//     const response = triangle.checkType();
-//     $('#response').append(`<p>${response}</p>`);
-//   });
- 
-// let request = new XMLHttpRequest();
-// const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}`;
+function clearFields() {
+  $('#keyword').val("");
+  $('.showErrors').text("");
+  $('.showResult').text("");
+}
+
+
+$(document).ready(function () {
+  $('#searchResult').click(function () {
+    let keyword = $(`#keyword`).val();
+    clearFields();
+    let promise = GIFservice.getPicture(keyword);
+
+
+    promise.then(function (response) {
+      const body = JSON.parse(response);
+      body.data.forEach(gif => {
+        $(`.showResult`).append(`<div class="card" style="width: 25%;">
+        <img src="${gif.images.fixed_height.url}" class="card-img-top" alt="${gif.title}">
+        <div class="card-body">
+          <p class="card-text">${gif.title}</p>
+        </div>
+      </div>`);
+      });
+    }, function (error) {
+      $('.showErrors').text(`There was an error processing your request: ${error}`);
+    });
+
+  });
+});
+
