@@ -4,12 +4,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
 import GIFservice from './GIF-service.js';
 import { GIFservice2 } from './GIF-service.js';
+import { GIFservice3 } from './GIF-service.js';
 
 function clearFields() {
   $('#keyword').val("");
   $('.showErrors').text("");
   $('.showResult').append("");
   $('.showTrendingResult').append("");
+  $('.showRandom').append("");
 }
 
 
@@ -32,6 +34,7 @@ $(document).ready(function () {
     clearFields();
     let promise = GIFservice.getPicture(keyword);
 
+
     promise.then(function (response) {
       const body = JSON.parse(response);
       body.data.forEach(gif => {
@@ -46,6 +49,20 @@ $(document).ready(function () {
       $('.showErrors').text(`There was an error processing your request: ${error}`);
     });
 
+  });
+
+
+  $("#searchRandom").click(function () {
+    clearFields();
+    let promise3 = GIFservice3.getRandom();
+
+    promise3.then(function (response) {
+      const body = JSON.parse(response);
+
+      $('.showRandom').append(
+        ` <img src="${body.data.images.fixed_width_small.url}" class="card-img-top" alt="${body.data.title}" style = "width:100px, height: 100px">`
+      );
+    });
   });
 });
 
