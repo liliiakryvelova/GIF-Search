@@ -1,4 +1,4 @@
-# _Name of the project_
+# _Gif Search_
 
 #### By _**Liliia Kryvelova**_ & _**Viktoriia Zubarieva**_ 
 ## Description
